@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.splash,
       routes: AppRoutes.mRouts,
       debugShowCheckedModeBanner: false,
     );
