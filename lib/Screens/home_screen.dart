@@ -79,10 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     arguments: getAllNotes[index],
                   ),
                   child: Container(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
+                      color: Color(
+                        getAllNotes[index][DBHelper.smartNoteBgColor], 
+                      ),
                       // color: Color.fromARGB(255, bgColor[0], bgColor[1], bgColor[2]),
                     ),
                     child: Column(

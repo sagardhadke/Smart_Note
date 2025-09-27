@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,6 +15,7 @@ class DBHelper {
   static final String smartNoteTitle = "smart_Note_title";
   static final String smartNoteDesc = "smart_Note_description";
   static final String smartNoteCreatedAt = "smart_Note_CreatedAt";
+  static final String smartNoteBgColor = "smart_Note_bgColor";
 
   Future<Database> initDB() async {
     if (myDb != null) {
@@ -32,10 +34,25 @@ class DBHelper {
       version: 1,
       onCreate: (db, version) {
         db.execute(
-          "create table $smartNoteTable ( $smartNoteId integer primary key autoincrement, $smartNoteTitle text, $smartNoteDesc text, $smartNoteCreatedAt text ) ",
+          "create table $smartNoteTable ( $smartNoteId integer primary key autoincrement, $smartNoteTitle text, $smartNoteDesc text, $smartNoteCreatedAt text, $smartNoteBgColor integer ) ",
         );
       },
     );
+  }
+
+  //* Random Lighter Color Generator
+  Future<int> generateLightColorValue() async {
+    final random = Random();
+
+    int baseR = 200;
+    int baseG = 200;
+    int baseB = 200;
+
+    int r = (baseR + random.nextInt(55) - 25).clamp(180, 255);
+    int g = (baseG + random.nextInt(55) - 25).clamp(180, 255);
+    int b = (baseB + random.nextInt(55) - 25).clamp(180, 255);
+
+    return (0xFF << 24) | (r << 16) | (g << 8) | b;
   }
 
   //* Create Smart Note
@@ -44,10 +61,12 @@ class DBHelper {
     required String mDesc,
   }) async {
     Database db = await initDB();
+    int colorValue = await generateLightColorValue();
     int rowsEffected = await db.insert(smartNoteTable, {
       smartNoteTitle: mTitle,
       smartNoteDesc: mDesc,
       smartNoteCreatedAt: DateTime.now().millisecondsSinceEpoch,
+      smartNoteBgColor: colorValue,
     });
     return rowsEffected > 0;
   }
