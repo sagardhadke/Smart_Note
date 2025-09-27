@@ -32,7 +32,7 @@ class DBHelper {
       version: 1,
       onCreate: (db, version) {
         db.execute(
-          "create table ($smartNoteId integer primary key autoincrement, $smartNoteTitle text, $smartNoteDesc text, $smartNoteCreatedAt text ) ",
+          "create table $smartNoteTable ( $smartNoteId integer primary key autoincrement, $smartNoteTitle text, $smartNoteDesc text, $smartNoteCreatedAt text ) ",
         );
       },
     );
@@ -63,7 +63,7 @@ class DBHelper {
   Future<bool> updateSmartNote({
     required String mTitle,
     required String mDesc,
-    required String id,
+    required int id,
   }) async {
     Database db = await initDB();
     int rowsEffected = await db.update(
@@ -76,7 +76,7 @@ class DBHelper {
   }
 
   //*delete smart note
-  Future<bool> deleteSmartNote({required String id}) async {
+  Future<bool> deleteSmartNote({required int id}) async {
     Database db = await initDB();
     int rowsEffected = await db.delete(
       smartNoteTable,
