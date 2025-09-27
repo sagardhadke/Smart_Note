@@ -13,7 +13,7 @@ class CreateNotes extends StatelessWidget {
       backgroundColor: Color(0XFF252525),
       appBar: AppBar(
         backgroundColor: Color(0XFF252525),
-        scrolledUnderElevation,
+        scrolledUnderElevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: InkWell(
