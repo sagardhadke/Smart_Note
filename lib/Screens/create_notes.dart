@@ -1,11 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_note/database/db_helper.dart';
 
-class CreateNotes extends StatelessWidget {
+class CreateNotes extends StatefulWidget {
   CreateNotes({super.key});
 
+  @override
+  State<CreateNotes> createState() => _CreateNotesState();
+}
+
+class _CreateNotesState extends State<CreateNotes> {
   TextEditingController titleController = TextEditingController();
+
   TextEditingController descController = TextEditingController();
+
+  DBHelper? dbRef;
+
+  @override
+  void initState() {
+    super.initState();
+    dbRef = DBHelper.getInstance;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    titleController.clear();
+    descController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +63,13 @@ class CreateNotes extends StatelessWidget {
                   borderRadius: BorderRadiusGeometry.circular(12),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                bool noteAdded = await dbRef!.addSmartNote(
+                  mTitle: titleController.text,
+                  mDesc: descController.text,
+                );
+                if (noteAdded) Navigator.pop(context);
+              },
               child: Text(
                 "Save",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
@@ -54,42 +82,48 @@ class CreateNotes extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(
           children: [
-            TextField(
-              controller: titleController,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Title',
-                hintStyle: TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey,
+            Flexible(
+              child: TextField(
+                controller: titleController,
+                maxLines: null,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
+                decoration: InputDecoration(
+                  hintText: 'Title',
+                  hintStyle: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
               ),
             ),
             SizedBox(height: 5),
-            TextField(
-              controller: descController,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Type Something...',
-                hintStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Colors.grey,
+            Expanded(
+              child: TextField(
+                controller: descController,
+                maxLines: null,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
+                decoration: InputDecoration(
+                  hintText: 'Type Something...',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
               ),
             ),
           ],
